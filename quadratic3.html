@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quadratic Solver - Class 10</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
+      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+    }
+
+    /* === BACKGROUND ANIMATION === */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .formula {
+      position: absolute;
+      color: rgba(0, 0, 0, 0.18);
+      font-size: 28px;
+      font-weight: bold;
+      animation: float 30s linear infinite;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(-150vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* === MAIN CONTAINER === */
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      color: #ff4081;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #333;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      margin: 10px;
+      width: 70px;
+      border: 2px solid #ff4081;
+      border-radius: 10px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #ff4081;
+      color: white;
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #d81b60;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #009688;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .discriminant {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #444;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🎓 Background Animated Formulas -->
+  <div class="background">
+    <div class="formula" style="left: 5%; animation-delay: 0s;">x = (-b ± √D)/2a</div>
+    <div class="formula" style="left: 20%; animation-delay: 5s;">a² + b² = c²</div>
+    <div class="formula" style="left: 40%; animation-delay: 10s;">(a + b)² = a² + 2ab + b²</div>
+    <div class="formula" style="left: 60%; animation-delay: 15s;">sin²θ + cos²θ = 1</div>
+    <div class="formula" style="left: 80%; animation-delay: 20s;">πr²</div>
+    <div class="formula" style="left: 30%; animation-delay: 25s;">S = ut + ½at²</div>
+  </div>
+
+  <!-- 🔍 Quadratic Solver App -->
+  <div class="container">
+    <h1>Quadratic Solver</h1>
+    <p><strong>ax² + bx + c = 0</strong></p>
+
+    <input type="number" id="a" placeholder="a">
+    <input type="number" id="b" placeholder="b">
+    <input type="number" id="c" placeholder="c">
+    <br>
+    <button onclick="solveQuadratic()">Solve</button>
+
+    <div class="discriminant" id="discriminantDisplay"></div>
+    <div id="result" class="result"></div>
+    <div id="error" class="error"></div>
+  </div>
+
+  <div class="footer">✨ Made with 💡 for Class 10 Math Project ✨</div>
+
+  <script>
+    function solveQuadratic() {
+      const a = parseFloat(document.getElementById('a').value);
+      const b = parseFloat(document.getElementById('b').value);
+      const c = parseFloat(document.getElementById('c').value);
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+      const discrimDiv = document.getElementById('discriminantDisplay');
+
+      resultDiv.innerHTML = "";
+      errorDiv.innerHTML = "";
+      discrimDiv.innerHTML = "";
+
+      if (isNaN(a) || isNaN(b) || isNaN(c)) {
+        errorDiv.innerHTML = "⚠️ Please enter all three values!";
+        return;
+      }
+
+      if (a === 0) {
+        errorDiv.innerHTML = "⚠️ 'a' cannot be 0 (not a quadratic equation)";
+        return;
+      }
+
+      const discriminant = b * b - 4 * a * c;
+      discrimDiv.innerHTML = `📘 Discriminant (D) = ${discriminant}`;
+
+      if (discriminant < 0) {
+        resultDiv.innerHTML = "❌ No Real Roots (Discriminant is negative)";
+        resultDiv.style.color = "#d32f2f";
+        return;
+      }
+
+      const root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+      const root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+
+      if (discriminant === 0) {
+        resultDiv.innerHTML = `✅ One Real Root: x = ${root1.toFixed(2)}`;
+      } else {
+        resultDiv.innerHTML = `✅ Two Real Roots:<br>x₁ = ${root1.toFixed(2)}<br>x₂ = ${root2.toFixed(2)}`;
+      }
+
+      resultDiv.style.color = "#009688";
+    }
+  </script>
+
+</body>
+</html>
